@@ -3,94 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kertas Soalan (Modul Topik Khas)</title>
+    <title>Kertas Soalan (Modul 3: Diri, Masa & Keluarga)</title>
     <!-- Memuatkan Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Menggunakan fon yang lebih kemas */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Apabila jawapan betul ditanda */
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* GAYA UNTUK MODE PEPERIKSAAN (TIADA WARNA JAWAPAN) */
+        /* Kelas ini dikekalkan jika anda mahu mengaktifkannya semula nanti, 
+           tetapi skrip di bawah tidak akan menggunakannya secara automatik. */
         .correct-answer {
-            background-color: #dcfce7; /* Hijau muda */
-            color: #166534; /* Hijau gelap */
-            font-weight: 600;
-            border-left: 4px solid #22c55e;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
+            background-color: #dcfce7; color: #166534; font-weight: 600;
+            border-left: 4px solid #22c55e; padding: 0.5rem; border-radius: 0.25rem;
         }
-        /* Apabila jawapan salah ditanda */
         .incorrect-answer {
-            background-color: #fee2e2; /* Merah muda */
-            color: #991b1b; /* Merah gelap */
-            text-decoration: line-through;
-            border-left: 4px solid #ef4444;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
+            background-color: #fee2e2; color: #991b1b; text-decoration: line-through;
+            border-left: 4px solid #ef4444; padding: 0.5rem; border-radius: 0.25rem;
         }
-        /* Menyorot input yang betul (untuk padanan) */
-        .correct-input {
-            border-color: #22c55e;
-            background-color: #dcfce7;
-            box-shadow: 0 0 0 2px #22c55e;
-        }
-        .incorrect-input {
-            border-color: #ef4444;
-            background-color: #fee2e2;
-            box-shadow: 0 0 0 2px #ef4444;
-        }
+        .correct-input { border-color: #22c55e; background-color: #dcfce7; box-shadow: 0 0 0 2px #22c55e; }
+        .incorrect-input { border-color: #ef4444; background-color: #fee2e2; box-shadow: 0 0 0 2px #ef4444; }
+
         /* Gaya untuk tab */
         .tab-button {
-            padding: 0.75rem 1.25rem;
-            margin-right: 0.5rem;
-            border-radius: 0.5rem 0.5rem 0 0;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background-color: #f3f4f6; /* bg-gray-100 */
-            color: #4b5563; /* text-gray-600 */
-            border-bottom: 2px solid transparent;
+            padding: 0.75rem 1.25rem; margin-right: 0.5rem; border-radius: 0.5rem 0.5rem 0 0;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+            background-color: #f3f4f6; color: #4b5563; border-bottom: 2px solid transparent;
         }
         .tab-button.active {
-            background-color: #ffffff; /* bg-white */
-            color: #1d4ed8; /* text-blue-700 */
-            border-bottom: 2px solid #2563eb; /* border-blue-600 */
+            background-color: #ffffff; color: #1d4ed8; border-bottom: 2px solid #2563eb;
         }
-        .tab-panel {
-            padding-top: 1.5rem; /* pt-6 */
-        }
-        /* Modal Overlay */
-        #nameModalOverlay {
-            transition: opacity 0.3s ease-in-out;
-        }
-        /* Modal Content */
-        #nameModalContent {
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        }
-        .modal-hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .modal-content-hidden {
-            opacity: 0;
-            transform: translateY(-20px) scale(0.95);
-        }
-        /* Sembunyikan kuiz pada mulanya */
-        #quizContainer {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-        #quizContainer.visible {
-            display: block;
-            opacity: 1;
-        }
+        /* Modal Styles */
+        #nameModalOverlay { transition: opacity 0.3s ease-in-out; }
+        #nameModalContent { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
+        .modal-hidden { opacity: 0; pointer-events: none; }
+        .modal-content-hidden { opacity: 0; transform: translateY(-20px) scale(0.95); }
+        #quizContainer { display: none; opacity: 0; transition: opacity 0.5s ease-in-out; }
+        #quizContainer.visible { display: block; opacity: 1; }
     </style>
-    <!-- Memuatkan fon Inter dari Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
 
@@ -98,821 +48,394 @@
     <div id="nameModalOverlay" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
         <div id="nameModalContent" class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Selamat Datang!</h2>
-            <p class="text-gray-600 mb-6">Sila masukkan nama penuh anda untuk memulakan kuiz.</p>
+            <p class="text-gray-600 mb-6">Sila masukkan nama penuh anda untuk memulakan sesi penilaian (assessment).</p>
             <form id="nameForm">
                 <label for="studentName" class="block text-sm font-medium text-gray-700 mb-2">Nama Penuh</label>
                 <input type="text" id="studentName" name="studentName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Cth: Ali bin Abu" required>
                 <button type="submit" class="w-full bg-blue-600 text-white font-bold text-lg py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out shadow-lg mt-6">
-                    Mulakan Kuiz
+                    Mula Menjawab
                 </button>
             </form>
         </div>
     </div>
-    <!-- Akhir Modal -->
 
-    <!-- Kontena Kuiz (tersembunyi pada mulanya) -->
+    <!-- Kontena Kuiz -->
     <div id="quizContainer" class="max-w-4xl mx-auto p-6 md:p-10 bg-white rounded-lg shadow-xl my-10">
-        
         <header class="border-b-2 border-blue-600 pb-4 mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-blue-700">Latihan Mendengar (Modul Topik Khas)</h1>
-            <p class="text-lg text-gray-600 mt-2">Ukuran, Rekreasi & Perayaan</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-700">Penilaian Mendengar (Modul 3)</h1>
+            <p class="text-lg text-gray-600 mt-2">Topik: Diri, Masa, Keluarga & Haiwan</p>
             <p class="text-md text-gray-800 mt-2 font-semibold">Pelajar: <span id="displayName" class="text-blue-700"></span></p>
         </header>
 
         <form id="quizForm">
             <p class="text-lg text-gray-700 mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <strong>Arahan:</strong> Dengar rakaman (tidak disediakan dalam fail ini) dan jawab semua soalan di bawah. Setelah selesai, klik butang "Semak Jawapan" di bahagian bawah untuk melihat markah anda.
+                <strong>Arahan:</strong> Dengar rakaman dan jawab semua soalan. Klik "Hantar Jawapan" apabila selesai. Markah akan direkodkan.
             </p>
 
             <!-- Navigasi Tab -->
-            <div id="tab-buttons" class="mb-4 border-b border-gray-300" role="tablist" aria-label="Bahagian Soalan">
-                <button type="button" class="tab-button active" role="tab" aria-selected="true" aria-controls="bahagian1" id="tab-btn-1" data-tab="bahagian1">Soalan 1-8</button>
-                <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="bahagian2" id="tab-btn-2" data-tab="bahagian2">Soalan 9-14</button>
-                <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="bahagian3" id="tab-btn-3" data-tab="bahagian3">Soalan 15-19</button>
-                <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="bahagian4" id="tab-btn-4" data-tab="bahagian4">Soalan 20-28</button>
-                <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="bahagian5" id="tab-btn-5" data-tab="bahagian5">Soalan 29-34</button>
-                <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="bahagian6" id="tab-btn-6" data-tab="bahagian6">Soalan 35-37</button>
+            <div id="tab-buttons" class="mb-4 border-b border-gray-300" role="tablist">
+                <button type="button" class="tab-button active" role="tab" data-tab="bahagian1">S 1-8</button>
+                <button type="button" class="tab-button" role="tab" data-tab="bahagian2">S 9-14</button>
+                <button type="button" class="tab-button" role="tab" data-tab="bahagian3">S 15-19</button>
+                <button type="button" class="tab-button" role="tab" data-tab="bahagian4">S 20-28</button>
+                <button type="button" class="tab-button" role="tab" data-tab="bahagian5">S 29-34</button>
+                <button type="button" class="tab-button" role="tab" data-tab="bahagian6">S 35-37</button>
             </div>
 
-            <!-- Kontena Panel Tab -->
             <div id="tab-content">
-                <!-- Bahagian 1: Soalan 1-8 (Topik: Ukuran dan Bahan) -->
-                <div id="bahagian1" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-1">
+                <!-- Bahagian 1 -->
+                <div id="bahagian1" class="tab-panel" role="tabpanel">
                     <section class="mb-10">
-                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 1 – 8</h2>
-                        
-                        <!-- Soalan 1 -->
+                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 1 – 8 (Pengenalan Diri)</h2>
+                        <!-- Q1 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q1-label">1. Berapakah ukuran panjang papan yang ayah perlukan?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q1-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q1" value="A" class="mr-3 accent-blue-600"> A. Satu meter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q1" value="B" class="mr-3 accent-blue-600"> B. Dua meter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q1" value="C" class="mr-3 accent-blue-600"> C. Tiga meter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q1" value="D" class="mr-3 accent-blue-600"> D. Dua sentimeter</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">1. Siapakah nama budak lelaki itu?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q1" value="A" class="mr-3"> A. Ali bin Abu</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q1" value="B" class="mr-3"> B. Adam bin Ramli</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q1" value="C" class="mr-3"> C. Ahmad bin Daud</label></div>
                         </div>
-
-                        <!-- Soalan 2 -->
+                        <!-- Q2 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q2-label">2. Apakah bahan yang mereka gunakan untuk rak buku?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q2-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q2" value="A" class="mr-3 accent-blue-600"> A. Kayu jati</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q2" value="B" class="mr-3 accent-blue-600"> B. Kayu jenis pain</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q2" value="C" class="mr-3 accent-blue-600"> C. Besi</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q2" value="D" class="mr-3 accent-blue-600"> D. Plastik</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">2. Berapakah umur Adam?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q2" value="A" class="mr-3"> A. 15 tahun</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q2" value="B" class="mr-3"> B. 16 tahun</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q2" value="C" class="mr-3"> C. 17 tahun</label></div>
                         </div>
-
-                        <!-- Soalan 3 -->
+                        <!-- Q3 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q3-label">3. Apakah ukuran paku yang tidak mencukupi?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q3-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q3" value="A" class="mr-3 accent-blue-600"> A. Satu inci</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q3" value="B" class="mr-3 accent-blue-600"> B. Dua inci</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q3" value="C" class="mr-3 accent-blue-600"> C. Satu sentimeter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q3" value="D" class="mr-3 accent-blue-600"> D. Dua meter</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">3. Berapakah bilangan adik Adam?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q3" value="A" class="mr-3"> A. Seorang</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q3" value="B" class="mr-3"> B. Dua orang</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q3" value="C" class="mr-3"> C. Tiga orang</label></div>
                         </div>
-
-                        <!-- Soalan 4 -->
+                        <!-- Q4 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q4-label">4. Apakah warna cat yang akan digunakan?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q4-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q4" value="A" class="mr-3 accent-blue-600"> A. Putih</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q4" value="B" class="mr-3 accent-blue-600"> B. Coklat gelap</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q4" value="C" class="mr-3 accent-blue-600"> C. Hitam</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q4" value="D" class="mr-3 accent-blue-600"> D. Varnis</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">4. Apakah haiwan peliharaan Adam?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q4" value="A" class="mr-3"> A. Kucing</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q4" value="B" class="mr-3"> B. Arnab</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q4" value="C" class="mr-3"> C. Hamster</label></div>
                         </div>
-
-                        <!-- Soalan 5 -->
+                        <!-- Q5 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q5-label">5. Apakah alat yang ayah perlukan dari atas meja?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q5-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q5" value="A" class="mr-3 accent-blue-600"> A. Tukul</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q5" value="B" class="mr-3 accent-blue-600"> B. Paku</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q5" value="C" class="mr-3 accent-blue-600"> C. Pembaris L</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q5" value="D" class="mr-3 accent-blue-600"> D. Gergaji</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">5. Pukul berapakah Adam bangun tidur?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q5" value="A" class="mr-3"> A. 5 pagi</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q5" value="B" class="mr-3"> B. 6 pagi</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q5" value="C" class="mr-3"> C. 7 pagi</label></div>
                         </div>
-
-                        <!-- Soalan 6 -->
+                        <!-- Q6 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q6-label">6. Berapa banyakkah cat yang diperlukan?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q6-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q6" value="A" class="mr-3 accent-blue-600"> A. Satu tin besar</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q6" value="B" class="mr-3 accent-blue-600"> B. Dua tin kecil</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q6" value="C" class="mr-3 accent-blue-600"> C. Satu tin kecil</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q6" value="D" class="mr-3 accent-blue-600"> D. Sepuluh liter</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">6. Apakah hobi ayah Adam?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q6" value="A" class="mr-3"> A. Memancing</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q6" value="B" class="mr-3"> B. Berkebun</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q6" value="C" class="mr-3"> C. Memasak</label></div>
                         </div>
-
-                        <!-- Soalan 7 -->
+                        <!-- Q7 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q7-label">7. Berapakah ukuran tebal papan itu?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q7-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q7" value="A" class="mr-3 accent-blue-600"> A. Dua meter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q7" value="B" class="mr-3 accent-blue-600"> B. Dua sentimeter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q7" value="C" class="mr-3 accent-blue-600"> C. Satu inci</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q7" value="D" class="mr-3 accent-blue-600"> D. Dua inci</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">7. Bilakah Adam memberi kucing makan?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q7" value="A" class="mr-3"> A. Pagi</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q7" value="B" class="mr-3"> B. Tengah hari</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q7" value="C" class="mr-3"> C. Petang</label></div>
                         </div>
-
-                        <!-- Soalan 8 -->
+                        <!-- Q8 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q8-label">8. Apakah bahan yang akan disapu selepas cat?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q8-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q8" value="A" class="mr-3 accent-blue-600"> A. Varnis</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q8" value="B" class="mr-3 accent-blue-600"> B. Cat coklat</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q8" value="C" class="mr-3 accent-blue-600"> C. Paku</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q8" value="D" class="mr-3 accent-blue-600"> D. Air</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">8. Apakah ucapan Adam?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q8" value="A" class="mr-3"> A. Selamat malam</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q8" value="B" class="mr-3"> B. Terima kasih</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q8" value="C" class="mr-3"> C. Jumpa lagi</label></div>
                         </div>
                     </section>
                 </div>
 
-                <!-- Bahagian 2: Soalan 9-14 (Topik: Rekreasi dan Hiburan) -->
-                <div id="bahagian2" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-2">
+                <!-- Bahagian 2 -->
+                <div id="bahagian2" class="tab-panel hidden" role="tabpanel">
                     <section class="mb-10">
-                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 9 – 14</h2>
-                        
-                        <!-- Soalan 9 -->
+                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 9 – 14 (Keluarga)</h2>
+                        <!-- Q9 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q9-label">9. Apakah nama acara yang akan diadakan?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q9-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q9" value="A" class="mr-3 accent-blue-600"> A. Hari Sukan</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q9" value="B" class="mr-3 accent-blue-600"> B. Pesta Buku dan Permainan</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q9" value="C" class="mr-3 accent-blue-600"> C. Hari Kantin</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q9" value="D" class="mr-3 accent-blue-600"> D. Pesta Congkak</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">9. Apakah sambutan yang akan diadakan?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q9" value="A" class="mr-3"> A. Hari Sukan</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q9" value="B" class="mr-3"> B. Hari Keluarga</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q9" value="C" class="mr-3"> C. Hari Guru</label></div>
                         </div>
-
-                        <!-- Soalan 10 -->
+                        <!-- Q10 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q10-label">10. Di manakah pesta ini akan diadakan?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q10-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q10" value="A" class="mr-3 accent-blue-600"> A. Di padang sekolah</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q10" value="B" class="mr-3 accent-blue-600"> B. Di dewan sekolah</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q10" value="C" class="mr-3 accent-blue-600"> C. Di bilik komputer sahaja</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q10" value="D" class="mr-3 accent-blue-600"> D. Di dataran perhimpunan</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">10. Bilakah sambutan itu diadakan?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q10" value="A" class="mr-3"> A. Hari Sabtu</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q10" value="B" class="mr-3"> B. Hari Ahad</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q10" value="C" class="mr-3"> C. Hari Isnin</label></div>
                         </div>
-
-                        <!-- Soalan 11 -->
+                        <!-- Q11 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q11-label">11. Pukul berapakah pesta ini akan bermula?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q11-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q11" value="A" class="mr-3 accent-blue-600"> A. 9 pagi</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q11" value="B" class="mr-3 accent-blue-600"> B. 5 petang</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q11" value="C" class="mr-3 accent-blue-600"> C. 9 malam</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q11" value="D" class="mr-3 accent-blue-600"> D. 10 pagi</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">11. Pukul berapakah acara bermula?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q11" value="A" class="mr-3"> A. 7 pagi</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q11" value="B" class="mr-3"> B. 8 pagi</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q11" value="C" class="mr-3"> C. 9 pagi</label></div>
                         </div>
-
-                        <!-- Soalan 12 -->
+                        <!-- Q12 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q12-label">12. Apakah pertandingan yang diadakan di bilik komputer?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q12-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q12" value="A" class="mr-3 accent-blue-600"> A. Pertandingan congkak</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q12" value="B" class="mr-3 accent-blue-600"> B. Pertandingan batu seremban</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q12" value="C" class="mr-3 accent-blue-600"> C. Pertandingan permainan video</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q12" value="D" class="mr-3 accent-blue-600"> D. Pertandingan melukis komik</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">12. Apakah acara sukaneka utama?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q12" value="A" class="mr-3"> A. Lari dalam guni</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q12" value="B" class="mr-3"> B. Tarik tali</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q12" value="C" class="mr-3"> C. Cari gula-gula</label></div>
                         </div>
-
-                        <!-- Soalan 13 -->
+                        <!-- Q13 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q13-label">13. Siapakah tetamu jemputan terkenal yang akan hadir?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q13-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q13" value="A" class="mr-3 accent-blue-600"> A. Pengetua sekolah</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q13" value="B" class="mr-3 accent-blue-600"> B. Guru Kelab Rekreasi</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q13" value="C" class="mr-3 accent-blue-600"> C. Tuan Lat</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q13" value="D" class="mr-3 accent-blue-600"> D. Pemain 'FIFA'</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">13. Bagaimanakah makanan disediakan?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q13" value="A" class="mr-3"> A. Disediakan sekolah</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q13" value="B" class="mr-3"> B. Beli di kantin</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q13" value="C" class="mr-3"> C. Bawa sendiri ('potluck')</label></div>
                         </div>
-
-                        <!-- Soalan 14 -->
+                        <!-- Q14 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q14-label">14. Berapakah harga untuk satu kupon?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q14-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q14" value="A" class="mr-3 accent-blue-600"> A. Lima ringgit</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q14" value="B" class="mr-3 accent-blue-600"> B. Sembilan ringgit</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q14" value="C" class="mr-3 accent-blue-600"> C. Sepuluh ringgit</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q14" value="D" class="mr-3 accent-blue-600"> D. Percuma</label>
-                            </div>
+                            <p class="text-lg font-semibold mb-3">14. Apakah warna baju yang digalakkan?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q14" value="A" class="mr-3"> A. Putih atau hitam</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q14" value="B" class="mr-3"> B. Biru atau merah</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q14" value="C" class="mr-3"> C. Kuning atau hijau</label></div>
                         </div>
                     </section>
                 </div>
 
-                <!-- Bahagian 3: Soalan 15-19 (Topik: Rekreasi dan Hiburan) -->
-                <div id="bahagian3" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-3">
+                <!-- Bahagian 3 -->
+                <div id="bahagian3" class="tab-panel hidden" role="tabpanel">
                     <section class="mb-10">
-                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 15 – 19</h2>
+                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 15 – 19 (Haiwan Peliharaan)</h2>
                         <div class="p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg mb-4">Padankan nama (15-19) dengan aktiviti rekreasi yang betul (A-F).</p>
-                            
-                            <!-- Senarai Kenyataan -->
-                            <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold text-gray-800 mb-2">Aktiviti Rekreasi</h3>
-                                <ul class="list-none space-y-1 text-gray-700">
-                                    <li><strong>A</strong> Bermain catur</li>
-                                    <li><strong>B</strong> Menonton wayang</li>
-                                    <li><strong>C</strong> Berlatih teater</li>
-                                    <li><strong>D</strong> Memanjat tembok</li>
-                                    <li><strong>E</strong> Kelas berenang</li>
-                                    <li><strong>F</strong> Membaca buku (Bukan hobi)</li>
-                                </ul>
+                            <p class="text-lg mb-4">Padankan nama dengan haiwan peliharaan mereka (A-E).</p>
+                            <div class="mb-4 p-3 bg-gray-50 rounded">
+                                <strong>Pilihan:</strong> A. Anjing, B. Arnab, C. Burung, D. Ikan Emas, E. Kura-kura
                             </div>
-
-                            <!-- Soalan Padanan -->
                             <div class="space-y-4">
-                                <div class="flex items-center space-x-4">
-                                    <label for="q15" class="text-lg font-semibold w-24">15. Raju</label>
-                                    <input type="text" id="q15" name="q15" maxlength="1" class="w-16 h-12 text-center text-lg font-bold border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition uppercase">
-                                </div>
-                                <div class="flex items-center space-x-4">
-                                    <label for="q16" class="text-lg font-semibold w-24">16. Siti</label>
-                                    <input type="text" id="q16" name="q16" maxlength="1" class="w-16 h-12 text-center text-lg font-bold border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition uppercase">
-                                </div>
-                                <div class="flex items-center space-x-4">
-                                    <label for="q17" class="text-lg font-semibold w-24">17. John</label>
-                                    <input type="text" id="q17" name="q17" maxlength="1" class="w-16 h-12 text-center text-lg font-bold border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition uppercase">
-                                </div>
-                                <div class="flex items-center space-x-4">
-                                    <label for="q18" class="text-lg font-semibold w-24">18. Fatimah</label>
-                                    <input type="text" id="q18" name="q18" maxlength="1" class="w-16 h-12 text-center text-lg font-bold border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition uppercase">
-                                </div>
-                                <div class="flex items-center space-x-4">
-                                    <label for="q19" class="text-lg font-semibold w-24">19. Kamal</label>
-                                    <input type="text" id="q19" name="q19" maxlength="1" class="w-16 h-12 text-center text-lg font-bold border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition uppercase">
-                                </div>
+                                <div class="flex items-center"><label class="w-24 font-semibold">15. Siti</label><input type="text" id="q15" name="q15" class="w-16 h-10 border rounded text-center uppercase"></div>
+                                <div class="flex items-center"><label class="w-24 font-semibold">16. Raju</label><input type="text" id="q16" name="q16" class="w-16 h-10 border rounded text-center uppercase"></div>
+                                <div class="flex items-center"><label class="w-24 font-semibold">17. Mei Ling</label><input type="text" id="q17" name="q17" class="w-16 h-10 border rounded text-center uppercase"></div>
+                                <div class="flex items-center"><label class="w-24 font-semibold">18. Ahmad</label><input type="text" id="q18" name="q18" class="w-16 h-10 border rounded text-center uppercase"></div>
+                                <div class="flex items-center"><label class="w-24 font-semibold">19. Sarah</label><input type="text" id="q19" name="q19" class="w-16 h-10 border rounded text-center uppercase"></div>
                             </div>
                         </div>
                     </section>
                 </div>
 
-                <!-- Bahagian 4: Soalan 20-28 (Topik: Perayaan dan Majlis Istimewa) -->
-                <div id="bahagian4" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-4">
+                <!-- Bahagian 4 -->
+                <div id="bahagian4" class="tab-panel hidden" role="tabpanel">
                     <section class="mb-10">
-                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 20 – 28</h2>
+                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 20 – 28 (Rutin & Masa)</h2>
+                        <!-- Q20 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">20. Zaki pergi ke sekolah menaiki apa?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q20" value="A" class="mr-3"> A. Basikal</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q20" value="B" class="mr-3"> B. Kereta bapa</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q20" value="C" class="mr-3"> C. Bas sekolah</label></div>
+                        </div>
+                        <!-- Q21 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">21. Pukul berapakah bas sampai?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q21" value="A" class="mr-3"> A. 6.30 pagi</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q21" value="B" class="mr-3"> B. 7.00 pagi</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q21" value="C" class="mr-3"> C. 7.15 pagi</label></div>
+                        </div>
+                        <!-- Q22 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">22. Apakah Zaki buat selepas sekolah?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q22" value="A" class="mr-3"> A. Bermain bola</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q22" value="B" class="mr-3"> B. Tidur sekejap</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q22" value="C" class="mr-3"> C. Tonton TV</label></div>
+                        </div>
+                        <!-- Q23 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">23. Bilakah Zaki buat kerja sekolah?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q23" value="A" class="mr-3"> A. Petang</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q23" value="B" class="mr-3"> B. Malam</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q23" value="C" class="mr-3"> C. Pagi buta</label></div>
+                        </div>
+                        <!-- Q24 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">24. Ke manakah keluarga Zaki pergi pada hari Ahad?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q24" value="A" class="mr-3"> A. Pusat beli-belah</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q24" value="B" class="mr-3"> B. Berkelah di pantai</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q24" value="C" class="mr-3"> C. Rumah nenek</label></div>
+                        </div>
+                        <!-- Q25 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">25. Apakah tugas Zaki di rumah?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q25" value="A" class="mr-3"> A. Membuang sampah</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q25" value="B" class="mr-3"> B. Menyapu lantai</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q25" value="C" class="mr-3"> C. Membasuh pinggan</label></div>
+                        </div>
+                        <!-- Q26 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">26. Berapa kerap Zaki mandikan kucing?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q26" value="A" class="mr-3"> A. Setiap hari</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q26" value="B" class="mr-3"> B. Seminggu sekali</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q26" value="C" class="mr-3"> C. Sebulan sekali</label></div>
+                        </div>
+                        <!-- Q27 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">27. Apakah nama kucing Zaki?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q27" value="A" class="mr-3"> A. Comel</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q27" value="B" class="mr-3"> B. Hitam</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q27" value="C" class="mr-3"> C. Tompok</label></div>
+                        </div>
+                        <!-- Q28 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">28. Apakah cita-cita Zaki?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q28" value="A" class="mr-3"> A. Doktor</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q28" value="B" class="mr-3"> B. Juruterbang</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q28" value="C" class="mr-3"> C. Guru</label></div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Bahagian 5 -->
+                <div id="bahagian5" class="tab-panel hidden" role="tabpanel">
+                    <section class="mb-10">
+                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 29 – 34 (Keluarga Besar)</h2>
+                        <!-- Q29 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">29. Berapakah bilangan anak Puan Salmah?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q29" value="A" class="mr-3"> A. 5 orang</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q29" value="B" class="mr-3"> B. 8 orang</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q29" value="C" class="mr-3"> C. 10 orang</label></div>
+                        </div>
+                        <!-- Q30 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">30. Apakah cabaran utama menjaga keluarga besar?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q30" value="A" class="mr-3"> A. Waktu tidur</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q30" value="B" class="mr-3"> B. Waktu makan</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q30" value="C" class="mr-3"> C. Waktu sekolah</label></div>
+                        </div>
+                        <!-- Q31 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">31. Pukul berapakah Puan Salmah bangun tidur?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q31" value="A" class="mr-3"> A. 4 pagi</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q31" value="B" class="mr-3"> B. 5 pagi</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q31" value="C" class="mr-3"> C. 6 pagi</label></div>
+                        </div>
+                        <!-- Q32 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">32. Apakah pekerjaan anak sulung Puan Salmah?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q32" value="A" class="mr-3"> A. Jurutera</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q32" value="B" class="mr-3"> B. Guru</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q32" value="C" class="mr-3"> C. Doktor</label></div>
+                        </div>
+                        <!-- Q33 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">33. Di manakah Puan Salmah mencatat tarikh lahir anak-anaknya?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q33" value="A" class="mr-3"> A. Telefon bimbit</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q33" value="B" class="mr-3"> B. Buku nota kecil</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q33" value="C" class="mr-3"> C. Kalendar dinding</label></div>
+                        </div>
+                        <!-- Q34 -->
+                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
+                            <p class="text-lg font-semibold mb-3">34. Apakah perasaan Puan Salmah mempunyai keluarga besar?</p>
+                            <div class="space-y-2"><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q34" value="A" class="mr-3"> A. Bahagia</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q34" value="B" class="mr-3"> B. Penat</label><label class="block p-3 rounded-lg hover:bg-gray-50"><input type="radio" name="q34" value="C" class="mr-3"> C. Pening</label></div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Bahagian 6 -->
+                <div id="bahagian6" class="tab-panel hidden" role="tabpanel">
+                    <section class="mb-10">
+                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 35 – 37 (Kucing Hilang)</h2>
+                        <p class="text-lg text-gray-700 mb-6">Pilih <strong>DUA</strong> jawapan yang betul.</p>
                         
-                        <h3 class="text-xl font-semibold text-gray-700 mb-4">Bahagian 1</h3>
-                        <!-- Soalan 20 -->
+                        <!-- Q35 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q20-label">20. Apakah tugas utama Puan Zaiton?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q20-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q20" value="A" class="mr-3 accent-blue-600"> A. Memasak untuk majlis.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q20" value="B" class="mr-3 accent-blue-600"> B. Membantu pasangan pengantin merancang majlis.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q20" value="C" class="mr-3 accent-blue-600"> C. Menjahit baju pengantin.</label>
+                            <p class="text-lg font-semibold mb-3">35. Bilakah kali terakhir ibu nampak 'Si Putih'?</p>
+                            <div class="space-y-2">
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q35" value="A" class="mr-3"> A. Masa makan tengah hari</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q35" value="B" class="mr-3"> B. Masa sarapan pagi</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q35" value="C" class="mr-3"> C. Malam semalam</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q35" value="D" class="mr-3"> D. Pagi tadi (betul)</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q35" value="E" class="mr-3"> E. Petang semalam</label>
                             </div>
                         </div>
-
-                        <!-- Soalan 21 -->
+                        <!-- Q36 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q21-label">21. Apakah majlis istimewa yang paling popular di Malaysia?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q21-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q21" value="A" class="mr-3 accent-blue-600"> A. Majlis hari jadi.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q21" value="B" class="mr-3 accent-blue-600"> B. Majlis perkahwinan.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q21" value="C" class="mr-3 accent-blue-600"> C. Majlis persaraan.</label>
+                            <p class="text-lg font-semibold mb-3">36. Di manakah dua tempat Linda cari/jumpa kucing itu?</p>
+                            <div class="space-y-2">
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q36" value="A" class="mr-3"> A. Bawah kereta ayah</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q36" value="B" class="mr-3"> B. Atas pokok</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q36" value="C" class="mr-3"> C. Rumah jiran (Mak Cik Kiah)</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q36" value="D" class="mr-3"> D. Dalam bilik air</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q36" value="E" class="mr-3"> E. Kedai runcit</label>
                             </div>
                         </div>
-
-                        <!-- Soalan 22 -->
+                        <!-- Q37 -->
                         <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q22-label">22. Apakah tema warna yang popular pada tahun ini?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q22-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q22" value="A" class="mr-3 accent-blue-600"> A. 'Peach' dan krim</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q22" value="B" class="mr-3 accent-blue-600"> B. Merah dan emas</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q22" value="C" class="mr-3 accent-blue-600"> C. Hitam dan putih</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 23 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q23-label">23. Apakah cabaran utama untuk majlis di luar?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q23-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q23" value="A" class="mr-3 accent-blue-600"> A. Bunga hiasan</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q23" value="B" class="mr-3 accent-blue-600"> B. Tetamu</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q23" value="C" class="mr-3 accent-blue-600"> C. Cuaca</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 24 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q24-label">24. Apakah bunga hiasan kegemaran Puan Zaiton?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q24-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q24" value="A" class="mr-3 accent-blue-600"> A. Bunga ros</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q24" value="B" class="mr-3 accent-blue-600"> B. Bunga raya</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q24" value="C" class="mr-3 accent-blue-600"> C. Bunga orkid</label>
-                            </div>
-                        </div>
-
-                        <h3 class="text-xl font-semibold text-gray-700 mt-10 mb-4">Bahagian 2</h3>
-                        <!-- Soalan 25 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q25-label">25. Apakah persembahan istimewa untuk menyambut pengantin?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q25-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q25" value="A" class="mr-3 accent-blue-600"> A. Persembahan silat</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q25" value="B" class="mr-3 accent-blue-600"> B. Persembahan tarian</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q25" value="C" class="mr-3 accent-blue-600"> C. Persembahan nyanyian</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 26 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q26-label">26. Berapakah bilangan tingkat kek yang menjadi trend?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q26-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q26" value="A" class="mr-3 accent-blue-600"> A. Satu tingkat</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q26" value="B" class="mr-3 accent-blue-600"> B. Dua tingkat</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q26" value="C" class="mr-3 accent-blue-600"> C. Tiga tingkat</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 27 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q27-label">27. Apakah bahan baju pengantin yang popular?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q27-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q27" value="A" class="mr-3 accent-blue-600"> A. Kain kapas</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q27" value="B" class="mr-3 accent-blue-600"> B. Kain songket</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q27" value="C" class="mr-3 accent-blue-600"> C. Kain sutera</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 28 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q28-label">28. Apakah nasihat Puan Zaiton kepada bakal pengantin?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q28-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q28" value="A" class="mr-3 accent-blue-600"> A. Mula merancang awal.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q28" value="B" class="mr-3 accent-blue-600"> B. Buat majlis di luar negara.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q28" value="C" class="mr-3 accent-blue-600"> C. Jimatkan bajet untuk bunga.</label>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <!-- Bahagian 5: Soalan 29-34 (Topik: Ukuran dan Bahan) -->
-                <div id="bahagian5" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-5">
-                    <section class="mb-10">
-                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 29 – 34</h2>
-                        
-                        <!-- Soalan 29 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q29-label">29. Apakah bahan kain yang paling selesa untuk cuaca Malaysia?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q29-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q29" value="A" class="mr-3 accent-blue-600"> A. Kain sutera</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q29" value="B" class="mr-3 accent-blue-600"> B. Kain kapas</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q29" value="C" class="mr-3 accent-blue-600"> C. Kain poliester</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q29" value="D" class="mr-3 accent-blue-600"> D. Kain linen</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 30 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q30-label">30. Mengapakah kain sutera jarang dipakai?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q30-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q30" value="A" class="mr-3 accent-blue-600"> A. Kerana ia sejuk.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q30" value="B" class="mr-3 accent-blue-600"> B. Kerana ia menyerap peluh.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q30" value="C" class="mr-3 accent-blue-600"> C. Kerana ia murah.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q30" value="D" class="mr-3 accent-blue-600"> D. Kerana ia mahal dan susah dijaga.</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 31 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q31-label">31. Berapa lamakah masa untuk siapkan sehelai kemeja 'custom-made'?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q31-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q31" value="A" class="mr-3 accent-blue-600"> A. Satu jam</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q31" value="B" class="mr-3 accent-blue-600"> B. Empat jam</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q31" value="C" class="mr-3 accent-blue-600"> C. Empat meter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q31" value="D" class="mr-3 accent-blue-600"> D. Satu hari</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 32 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q32-label">32. Apakah alatan paling penting selain mesin jahit?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q32-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q32" value="A" class="mr-3 accent-blue-600"> A. Kain kapas</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q32" value="B" class="mr-3 accent-blue-600"> B. Gunting</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q32" value="C" class="mr-3 accent-blue-600"> C. Pita pengukur</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q32" value="D" class="mr-3 accent-blue-600"> D. Jarum</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 33 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q33-label">33. Berapa meterkah kain diperlukan untuk sepasang baju kurung biasa?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q33-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q33" value="A" class="mr-3 accent-blue-600"> A. Satu meter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q33" value="B" class="mr-3 accent-blue-600"> B. Dua meter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q33" value="C" class="mr-3 accent-blue-600"> C. Empat meter</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q33" value="D" class="mr-3 accent-blue-600"> D. Empat jam</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 34 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q34-label">34. Apakah nasihat Encik David untuk orang yang baru belajar menjahit?</p>
-                            <div class="space-y-2" role="radiogroup" aria-labelledby="q34-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q34" value="A" class="mr-3 accent-blue-600"> A. Mula dengan projek kecil seperti sarung bantal.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q34" value="B" class="mr-3 accent-blue-600"> B. Terus jahit baju kurung.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q34" value="C" class="mr-3 accent-blue-600"> C. Beli mesin jahit yang paling mahal.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="radio" name="q34" value="D" class="mr-3 accent-blue-600"> D. Menjahit kain sutera dahulu.</label>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <!-- Bahagian 6: Soalan 35-37 (Topik: Perayaan dan Majlis Istimewa) -->
-                <div id="bahagian6" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-6">
-                    <section class="mb-10">
-                        <h2 class="text-2xl font-semibold text-blue-600 mb-6 pb-2 border-b">Soalan 35 – 37</h2>
-                        <p class="text-lg text-gray-700 mb-6 p-4 bg-gray-100 rounded-lg">
-                            <strong>Arahan:</strong> Bagi setiap soalan, tanda (✓) dalam <strong>dua</strong> kotak yang betul.
-                        </p>
-
-                        <!-- Soalan 35 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q35-label">35. Apakah dua persiapan yang dibuat oleh keluarga Kumar untuk Deepavali?</p>
-                            <div class="space-y-2" role="group" aria-labelledby="q35-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q35" value="A" class="mr-3 accent-blue-600"> A. Membeli baju raya baru.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q35" value="B" class="mr-3 accent-blue-600"> B. Membersihkan rumah.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q35" value="C" class="mr-3 accent-blue-600"> C. Memasak rendang daging.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q35" value="D" class="mr-3 accent-blue-600"> D. Ibu Kumar membuat murukku.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q35" value="E" class="mr-3 accent-blue-600"> E. Menghias lampu kelip-kelip.</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 36 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q36-label">36. Apakah dua persiapan yang dibuat oleh keluarga Aina untuk Hari Raya Haji?</p>
-                            <div class="space-y-2" role="group" aria-labelledby="q36-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q36" value="A" class="mr-3 accent-blue-600"> A. Membeli baju raya baru.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q36" value="B" class="mr-3 accent-blue-600"> B. Membuat kuih murukku.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q36" value="C" class="mr-3 accent-blue-600"> C. Membersihkan rumah.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q36" value="D" class="mr-3 accent-blue-600"> D. Memasak rendang daging.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q36" value="E" class="mr-3 accent-blue-600"> E. Memanggil lampu 'vilakku'.</label>
-                            </div>
-                        </div>
-
-                        <!-- Soalan 37 -->
-                        <div class="mb-6 p-5 bg-white rounded-lg shadow-md border border-gray-200">
-                            <p class="text-lg font-semibold mb-3" id="q37-label">37. Apakah dua perkara yang sama tentang sambutan perayaan mereka?</p>
-                            <div class="space-y-2" role="group" aria-labelledby="q37-label">
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q37" value="A" class="mr-3 accent-blue-600"> A. Kedua-dua keluarga memasak rendang.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q37" value="B" class="mr-3 accent-blue-600"> B. Kedua-dua keluarga membuat kuih yang sama.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q37" value="C" class="mr-3 accent-blue-600"> C. Kedua-dua keluarga menghias dengan lampu (kelip-kelip / kolam).</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q37" value="D" class="mr-3 accent-blue-600"> D. Matlamat utama adalah untuk keluarga berkumpul.</label>
-                                <label class="block p-3 rounded-lg hover:bg-gray-50 transition-colors"><input type="checkbox" name="q37" value="E" class="mr-3 accent-blue-600"> E. Kedua-dua keluarga membeli baju di tempat yang sama.</label>
+                            <p class="text-lg font-semibold mb-3">37. Apakah keadaan 'Si Putih' semasa dijumpai dan nasihat ibu?</p>
+                            <div class="space-y-2">
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q37" value="A" class="mr-3"> A. Sedang makan ikan</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q37" value="B" class="mr-3"> B. Sedang tidur lena</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q37" value="C" class="mr-3"> C. Cedera di kaki</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q37" value="D" class="mr-3"> D. Pastikan pintu pagar ditutup</label>
+                                <label class="block p-3 rounded-lg hover:bg-gray-50"><input type="checkbox" name="q37" value="E" class="mr-3"> E. Berikan dia susu</label>
                             </div>
                         </div>
                     </section>
                 </div>
             </div>
 
-            <!-- Butang Hantar -->
-            <button type="submit" id="submitButton" class="w-full bg-blue-600 text-white font-bold text-xl py-4 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out shadow-lg mt-6">
-                Semak Jawapan
-            </button>
-
+            <button type="submit" id="submitButton" class="w-full bg-blue-600 text-white font-bold text-xl py-4 px-6 rounded-lg hover:bg-blue-700 transition shadow-lg mt-6">Hantar Jawapan</button>
         </form>
-
-        <!-- Bahagian Keputusan (tersembunyi) -->
-        <div id="result" class="hidden mt-10 p-8 bg-gray-50 rounded-lg shadow-inner text-center">
-            <!-- Keputusan akan dimasukkan di sini oleh JavaScript -->
-        </div>
-
+        <div id="result" class="hidden mt-10 p-8 bg-gray-50 rounded-lg shadow-inner text-center"></div>
     </div>
 
     <script>
-        // --- GANTI INI DENGAN URL GOOGLE APPS SCRIPT ANDA ---
-        const GOOGLE_APP_SCRIPT_URL = 'PASTE_YOUR_URL_HERE'; 
-        // --------------------------------------------------
-
-        let studentName = ''; // Untuk menyimpan nama pelajar
-        let submissionTime = ''; // Untuk menyimpan masa mula
-
-        const modalOverlay = document.getElementById('nameModalOverlay');
-        const modalContent = document.getElementById('nameModalContent');
-        const nameForm = document.getElementById('nameForm');
-        const studentNameInput = document.getElementById('studentName');
-        const quizContainer = document.getElementById('quizContainer');
-        const displayName = document.getElementById('displayName');
-        const submitButton = document.getElementById('submitButton');
+        // URL Skrip Google Sheet anda
+        const GOOGLE_APP_SCRIPT_URL = 'PASTE_YOUR_URL_HERE';
+        
+        let studentName = '';
+        let submissionTime = '';
 
         // --- Logik Modal Nama ---
-        nameForm.addEventListener('submit', function(e) {
+        document.getElementById('nameForm').addEventListener('submit', e => {
             e.preventDefault();
-            studentName = studentNameInput.value.trim();
+            studentName = document.getElementById('studentName').value.trim();
             if (studentName) {
-                // Simpan nama dan masa mula
-                displayName.textContent = studentName;
+                document.getElementById('displayName').textContent = studentName;
                 submissionTime = new Date().toISOString();
-                
-                // Sembunyikan modal dengan animasi
-                modalOverlay.classList.add('modal-hidden');
-                modalContent.classList.add('modal-content-hidden');
-                
-                // Paparkan kuiz selepas animasi modal selesai
+                document.getElementById('nameModalOverlay').classList.add('modal-hidden');
+                document.getElementById('nameModalContent').classList.add('modal-content-hidden');
                 setTimeout(() => {
-                    modalOverlay.style.display = 'none'; // Sembunyikan terus
-                    quizContainer.classList.add('visible');
-                }, 300); // Selaraskan dengan tempoh transisi CSS
+                    document.getElementById('nameModalOverlay').style.display = 'none';
+                    document.getElementById('quizContainer').classList.add('visible');
+                }, 300);
             }
         });
 
         // --- Logik Tab ---
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabPanels = document.querySelectorAll('.tab-panel');
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Nyahaktifkan semua butang dan panel
-                tabButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                    btn.setAttribute('aria-selected', 'false');
-                });
-                tabPanels.forEach(panel => panel.classList.add('hidden'));
-
-                // Aktifkan tab yang diklik
-                button.classList.add('active');
-                button.setAttribute('aria-selected', 'true');
-                const tabId = button.getAttribute('data-tab');
-                document.getElementById(tabId).classList.remove('hidden');
+        const tabs = document.querySelectorAll('.tab-button');
+        const panels = document.querySelectorAll('.tab-panel');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                panels.forEach(p => p.classList.add('hidden'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.remove('hidden');
             });
         });
 
-        // --- Logik Navigasi Tab Papan Kekunci ---
-        const tabList = document.querySelector('[role="tablist"]');
-        tabList.addEventListener('keydown', e => {
-            let currentIndex = Array.from(tabButtons).findIndex(tab => tab === document.activeElement);
-            if (currentIndex === -1) return; // Fokus bukan pada tab
-
-            let nextIndex;
-            if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                nextIndex = (currentIndex + 1) % tabButtons.length;
-            } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                nextIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
-            } else {
-                return; // Kekunci lain
-            }
-
-            tabButtons[nextIndex].focus();
-            tabButtons[nextIndex].click(); // Menggunakan logik klik sedia ada untuk tukar panel
-        });
-
-        // --- Logik Navigasi Radio Papan Kekunci ---
-        const radioButtons = document.querySelectorAll('input[type="radio"]');
-        radioButtons.forEach(radio => {
-            radio.addEventListener('keydown', e => {
-                if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                    return;
-                }
-                e.preventDefault();
-
-                const groupName = radio.name;
-                const radiosInGroup = Array.from(document.querySelectorAll(`input[name="${groupName}"]`));
-                let currentIndex = radiosInGroup.findIndex(r => r === radio);
-                let nextIndex;
-
-                if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                    nextIndex = (currentIndex + 1) % radiosInGroup.length;
-                } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                    nextIndex = (currentIndex - 1 + radiosInGroup.length) % radiosInGroup.length;
-                }
-
-                radiosInGroup[nextIndex].focus();
-                radiosInGroup[nextIndex].checked = true;
-            });
-        });
-
-        // --- Logik Kuiz ---
-        document.getElementById('quizForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Menghalang borang daripada dihantar
-
-            // JAWAPAN YANG BETUL (BERDASARKAN SKRIP MODUL TOPIK KHAS)
-            const correctAnswers = {
-                q1: "B", q2: "B", q3: "A", q4: "B", q5: "C", q6: "C", q7: "B", q8: "A",
-                q9: "B", q10: "B", q11: "A", q12: "C", q13: "C", q14: "C",
-                q15: "E", q16: "B", q17: "C", q18: "D", q19: "A",
-                q20: "B", q21: "B", q22: "A", q23: "C", q24: "A",
-                q25: "A", q26: "C", q27: "B", q28: "A",
-                q29: "B", q30: "D", q31: "B", q32: "C", q33: "C", q34: "A",
-                q35: ["B", "D"], // Membersihkan rumah, Buat murukku
-                q36: ["A", "D"], // Beli baju raya, Masak rendang
-                q37: ["C", "D"]  // Hias lampu, Keluarga berkumpul
+        // --- Logik Menghantar Kuiz (Mode Penilaian) ---
+        document.getElementById('quizForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const correct = {
+                q1: "B", q2: "B", q3: "B", q4: "A", q5: "B", q6: "B", q7: "C", q8: "C",
+                q9: "B", q10: "A", q11: "B", q12: "A", q13: "C", q14: "B",
+                q15: "B", q16: "A", q17: "D", q18: "C", q19: "E",
+                q20: "C", q21: "B", q22: "B", q23: "B", q24: "B", q25: "A", q26: "B", q27: "C", q28: "B",
+                q29: "C", q30: "B", q31: "B", q32: "C", q33: "B", q34: "A",
+                q35: ["B", "D"], q36: ["A", "C"], q37: ["B", "D"]
             };
 
-            let currentScore = 0;
-            const totalMarks = 40; // 34 soalan x 1 markah + 3 soalan x 2 markah
-            const formData = new FormData(this);
+            let score = 0;
+            let total = 40;
+            const formData = new FormData(e.target);
 
-            // --- Reset semua gaya ---
-            document.querySelectorAll('label').forEach(label => {
-                label.classList.remove('correct-answer', 'incorrect-answer');
-            });
-            document.querySelectorAll('input[type="text"]').forEach(input => {
-                input.classList.remove('correct-input', 'incorrect-input');
-            });
-            document.querySelectorAll('.correct-hint').forEach(hint => hint.remove());
-
-
-            // --- Semak Soalan 1-14 (Radio) ---
-            for (let i = 1; i <= 14; i++) {
-                const name = 'q' + i;
-                const userAnswer = formData.get(name);
-                const correctAnswer = correctAnswers[name];
-                
-                const correctLabelEl = document.querySelector(`label input[name="${name}"][value="${correctAnswer}"]`);
-                if (correctLabelEl) {
-                    correctLabelEl.parentElement.classList.add('correct-answer');
-                }
-
-                if (userAnswer) {
-                    if (userAnswer === correctAnswer) {
-                        currentScore++;
-                    } else {
-                        const incorrectLabelEl = document.querySelector(`label input[name="${name}"][value="${userAnswer}"]`);
-                        if (incorrectLabelEl) {
-                            incorrectLabelEl.parentElement.classList.add('incorrect-answer');
-                        }
-                    }
+            // Kira Markah (Tanpa mengubah warna visual)
+            // Check Radio/Text
+            for (let i=1; i<=34; i++) {
+                let q = 'q'+i;
+                if (i>=15 && i<=19) { // Text inputs
+                    let input = document.getElementById(q);
+                    let val = input.value.trim().toUpperCase();
+                    if (val === correct[q]) { score++; }
+                } else { // Radios
+                    let val = formData.get(q);
+                    let correctVal = correct[q];
+                    if (val && val === correctVal) score++;
                 }
             }
 
-            // --- Semak Soalan 15-19 (Padanan - Teks) ---
-            for (let i = 15; i <= 19; i++) {
-                const name = 'q' + i;
-                const inputElement = document.getElementById(name);
-                const userAnswer = inputElement.value.trim().toUpperCase();
-                const correctAnswer = correctAnswers[name];
-
-                if (userAnswer === correctAnswer) {
-                    currentScore++;
-                    inputElement.classList.add('correct-input');
-                } else {
-                    inputElement.classList.add('incorrect-input');
-                    if (!inputElement.nextElementSibling || !inputElement.nextElementSibling.classList.contains('correct-hint')) {
-                        const hint = document.createElement('span');
-                        hint.textContent = ` (Jawapan: ${correctAnswer})`;
-                        hint.className = 'correct-hint text-green-600 font-semibold ml-2';
-                        inputElement.parentElement.appendChild(hint);
-                    }
-                }
-            }
-            
-            // --- Semak Soalan 20-34 (Radio) ---
-            for (let i = 20; i <= 34; i++) {
-                const name = 'q' + i;
-                const userAnswer = formData.get(name);
-                const correctAnswer = correctAnswers[name];
+            // Check Checkboxes (35-37)
+            [35, 36, 37].forEach(i => {
+                let q = 'q'+i;
+                let userVals = formData.getAll(q);
+                let ans = correct[q];
+                let qScore = 0;
                 
-                const correctLabelEl = document.querySelector(`label input[name="${name}"][value="${correctAnswer}"]`);
-                 if (correctLabelEl) {
-                    correctLabelEl.parentElement.classList.add('correct-answer');
-                }
-
-                if (userAnswer) {
-                    if (userAnswer === correctAnswer) {
-                        currentScore++;
-                    } else {
-                        const incorrectLabelEl = document.querySelector(`label input[name="${name}"][value="${userAnswer}"]`);
-                        if (incorrectLabelEl) {
-                            incorrectLabelEl.parentElement.classList.add('incorrect-answer');
-                        }
-                    }
-                }
-            }
-
-            // --- Semak Soalan 35-37 (Checkbox - 2 markah setiap satu) ---
-            for (let i = 35; i <= 37; i++) {
-                const name = 'q' + i;
-                const userAnswers = formData.getAll(name); // Dapatkan semua yang ditanda
-                const correctAnswersList = correctAnswers[name]; // Senarai [A, D]
-                
-                let questionScore = 0;
-                
-                // Tanda semua jawapan yang betul
-                correctAnswersList.forEach(value => {
-                    const correctLabelEl = document.querySelector(`label input[name="${name}"][value="${value}"]`);
-                    if (correctLabelEl) {
-                        correctLabelEl.parentElement.classList.add('correct-answer');
-                    }
+                userVals.forEach(v => {
+                    if (ans.includes(v)) qScore++;
+                    else qScore--;
                 });
+                if(qScore > 0) score += qScore; 
+            });
 
-                userAnswers.forEach(userValue => {
-                    if (correctAnswersList.includes(userValue)) {
-                        // Jawapan betul ditanda
-                        questionScore++;
-                    } else {
-                        // Jawapan salah ditanda (penalti)
-                        questionScore--; 
-                        const incorrectLabelEl = document.querySelector(`label input[name="${name}"][value="${userValue}"]`);
-                        if (incorrectLabelEl) {
-                            incorrectLabelEl.parentElement.classList.add('incorrect-answer');
-                        }
-                    }
-                });
-
-                // Kira markah: 2 jika kedua-dua betul, 1 jika satu betul, 0 jika salah
-                if (questionScore === 2) {
-                    currentScore += 2;
-                } else if (questionScore === 1) {
-                    currentScore += 1;
-                }
-                // Jika questionScore <= 0, tiada markah ditambah.
-            }
-
-            // --- Paparkan Keputusan ---
+            // Paparkan Keputusan (Hanya Markah)
             const resultDiv = document.getElementById('result');
-            const percentage = ((currentScore / totalMarks) * 100).toFixed(0);
-
-            let resultMessage = `Anda mendapat <strong>${currentScore}</strong> daripada <strong>${totalMarks}</strong> markah. (${percentage}%)`;
-            let resultColor = "text-gray-800";
-
-            if (percentage >= 80) {
-                resultMessage += "<br>Cemerlang! Tahniah!";
-                resultColor = "text-green-700";
-            } else if (percentage >= 60) {
-                resultMessage += "<br>Baik! Usaha lagi!";
-                resultColor = "text-blue-700";
-            } else if (percentage >= 40) {
-                resultMessage += "<br>Memuaskan. Anda perlu membuat lebih banyak latihan.";
-                resultColor = "text-yellow-700";
-            } else {
-                resultMessage += "<br>Perlu usaha gigih. Jangan putus asa!";
-                resultColor = "text-red-700";
-            }
-
-            resultDiv.innerHTML = `<h2 class="text-3xl font-bold mb-4 ${resultColor}">Keputusan Anda</h2>
-                                   <p class="text-xl ${resultColor}">${resultMessage}</p>
-                                   <p class="text-gray-600 mt-4">Tatal ke atas untuk melihat jawapan yang betul (disorot hijau) dan jawapan anda yang salah (disorot merah).</p>`;
             resultDiv.classList.remove('hidden');
-
-            // Tatal ke bahagian keputusan
-            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            resultDiv.innerHTML = `
+                <h2 class="text-3xl font-bold text-blue-800">Terima Kasih!</h2>
+                <p class="text-lg mt-2">Jawapan anda telah dihantar.</p>
+                <h3 class="text-4xl font-bold mt-4 text-gray-800">Markah Anda: ${score} / ${total}</h3>
+                <p class="text-gray-600 mt-4 text-sm">Data sedang dihantar ke sistem...</p>
+            `;
             
-            // Nyahaktifkan butang hantar
-            submitButton.disabled = true;
-            submitButton.textContent = 'Jawapan Telah Dihantar';
-            submitButton.classList.add('bg-gray-400', 'hover:bg-gray-400');
-            submitButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            // Matikan semua input supaya pelajar tidak boleh ubah jawapan
+            const allInputs = document.querySelectorAll('input, button[type="submit"]');
+            allInputs.forEach(el => el.disabled = true);
+            document.getElementById('submitButton').classList.add('bg-gray-400');
+            document.getElementById('submitButton').classList.remove('bg-blue-600', 'hover:bg-blue-700');
 
-            // --- Hantar data ke Google Sheet ---
-            sendDataToGoogleSheet(studentName, currentScore, totalMarks, submissionTime);
-        });
-
-        // --- Fungsi Hantar Data ke Google Sheet ---
-        function sendDataToGoogleSheet(name, score, total, timestamp) {
-            if (GOOGLE_APP_SCRIPT_URL === 'PASTE_YOUR_URL_HERE' || GOOGLE_APP_SCRIPT_URL === '') {
-                console.warn('Google App Script URL tidak ditetapkan. Data tidak akan dihantar.');
-                // Tambah mesej amaran pada UI
-                const resultDiv = document.getElementById('result');
-                const warningMsg = document.createElement('p');
-                warningMsg.innerHTML = `<strong class="text-red-600">Amaran:</strong> Sambungan ke Google Sheet tidak ditetapkan. Markah anda tidak akan direkodkan.`;
-                warningMsg.className = 'text-sm text-gray-700 mt-4 p-3 bg-red-100 rounded-lg border border-red-300';
-                resultDiv.appendChild(warningMsg);
-                return; // Keluar dari fungsi
+            // Hantar Data ke Google Sheet
+            if (GOOGLE_APP_SCRIPT_URL !== 'PASTE_YOUR_URL_HERE' && GOOGLE_APP_SCRIPT_URL !== '') {
+                fetch(GOOGLE_APP_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({name: studentName, score: score, total: total, timestamp: submissionTime})
+                }).then(() => {
+                    resultDiv.innerHTML += '<br><span class="text-green-600 font-semibold">Data berjaya direkodkan.</span>';
+                }).catch(() => {
+                    resultDiv.innerHTML += '<br><span class="text-red-600">Gagal menghantar data. Sila semak internet.</span>';
+                });
+            } else {
+                resultDiv.innerHTML += '<br><span class="text-red-600 font-bold">Amaran: URL Google Script belum ditetapkan.</span>';
             }
-
-            const data = {
-                name: name,
-                score: score,
-                total: total,
-                timestamp: timestamp
-            };
-            
-            const resultDiv = document.getElementById('result');
-            const statusMsg = document.createElement('p');
-            statusMsg.textContent = 'Menghantar markah anda ke Google Sheet...';
-            statusMsg.className = 'text-sm text-gray-600 mt-4 italic';
-            resultDiv.appendChild(statusMsg);
-
-            fetch(GOOGLE_APP_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', // Penting untuk elak ralat CORS apabila menghantar ke Google Apps Script
-                cache: 'no-cache',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(() => {
-                // Disebabkan 'no-cors', kita tidak boleh baca respon
-                // Jadi kita anggap ia berjaya jika tiada ralat network
-                console.log('Data submission attempted.');
-                statusMsg.textContent = 'Markah anda telah berjaya direkodkan.';
-                statusMsg.className = 'text-sm text-green-700 mt-4 font-semibold';
-            })
-            .catch(error => {
-                console.error('Error sending data to Google Sheet:', error);
-                statusMsg.textContent = 'Gagal merekodkan markah anda. Sila periksa sambungan internet.';
-                statusMsg.className = 'text-sm text-red-700 mt-4 font-semibold';
-            });
-        }
+        });
     </script>
-
 </body>
 </html>
